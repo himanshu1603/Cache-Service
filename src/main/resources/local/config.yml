@@ -1,0 +1,35 @@
+appName: "Dropwizard Basic Example"
+
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 8080
+    idleTimeout: 30 seconds
+    acceptorThreads: 1
+    selectorThreads: 2
+    useServerHeader: true
+    useDateHeader: true
+  adminConnectors:
+  - type: http
+    port: 8081
+    idleTimeout: 30 seconds
+    acceptorThreads: 1
+    selectorThreads: 2
+    useServerHeader: true
+    useDateHeader: true
+
+  requestLog:
+    enabled: true
+    appenders:
+      - type: console
+        timeZone: IST
+        logFormat: '%h %l %u [%t{dd/MMM/yyyy:HH:mm:ss Z,IST}] [%reqAttribute{ga-property}] "%r" %s %b "%i{Referer}" "%i{User-Agent}" %D'
+
+logging:
+  loggers:
+      org.glassfish.jersey.filter.LoggingFilter: INFO
+  level: INFO
+  appenders:
+    - type: console
+      logFormat: "%d{dd/MMM/yyyy:HH:mm:ss Z,GMT} %highlight(%-5level) [%thread] %cyan(%logger{10}) [%X{id}] %msg%n"
