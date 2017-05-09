@@ -16,12 +16,12 @@ Steps to run project :
 5. This project exposes following 2 apis   
     1) /demo/name : A GET api , it simply returns a map , which contains application name  
     using curl you can hit this api as follows :   
-        curl -X GET http://localhost:8080/demo/name  
+        curl -X GET http://localhost:27660/demo/name  
     Response :: {"name":"Dropwizard Basic Example"}
     2) /demo/dummy  : A POST api , it takes input an object consisting of firstName and lastname in json format  
         and returns same object as json  
      usage :   
-        curl -X POST -H "Content-Type: application/json"  -d '{"firstName":"Java","lastName":"Server"}' 'http://localhost:8080/demo/dummy'  
+        curl -X POST -H "Content-Type: application/json"  -d '{"firstName":"Java","lastName":"Server"}' 'http://localhost:27660/demo/dummy'  
      Response : {"firstName":"Java","lastName":"Server"}
 
 
