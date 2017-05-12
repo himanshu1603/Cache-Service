@@ -29,7 +29,7 @@ public class DropApplication extends Application<DropConfiguration> {
         DemoService demoService = new DemoService();
         environment.jersey().register(new DemoResource(configuration, demoService));
 
-        //TODO write your code for exposing cache get and put apis
+
 
         //Ignore below code
         environment.jersey().register(RequestFilter.class);

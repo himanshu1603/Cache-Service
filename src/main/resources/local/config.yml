@@ -4,7 +4,7 @@ appName: "Dropwizard Basic Example"
 server:
   applicationConnectors:
   - type: http
-    port: 27660
+    port: 8080
     idleTimeout: 30 seconds
     acceptorThreads: 1
     selectorThreads: 2
@@ -12,7 +12,7 @@ server:
     useDateHeader: true
   adminConnectors:
   - type: http
-    port: 27661
+    port: 8081
     idleTimeout: 30 seconds
     acceptorThreads: 1
     selectorThreads: 2
