@@ -29,7 +29,7 @@ public class DemoResource {
     @Path("/name")
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String,String> getAppName(){
-        log.info("application name is :: "+dropConfiguration.getAppName());
+        //log.info("application name is :: "+dropConfiguration.getAppName());
         Map<String,String> map = new HashMap<>();
         map.put("name",dropConfiguration.getAppName());
         return map;
@@ -42,4 +42,6 @@ public class DemoResource {
         DummyObject dummyObject1 = demoService.dummyFunctionWithObjectParam(dummyObject);
         return dummyObject1;
     }
+
+    
 }

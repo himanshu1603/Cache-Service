@@ -1,7 +1,9 @@
 package codemeek.dropwizard.example;
 
 import codemeek.dropwizard.example.filter.RequestFilter;
+import codemeek.dropwizard.example.resources.CacheResource;
 import codemeek.dropwizard.example.resources.DemoResource;
+import codemeek.dropwizard.example.service.CacheService;
 import codemeek.dropwizard.example.service.DemoService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -28,6 +30,9 @@ public class DropApplication extends Application<DropConfiguration> {
         //you have to do same thing ( registering resource ) but using guice injector
         DemoService demoService = new DemoService();
         environment.jersey().register(new DemoResource(configuration, demoService));
+        
+        CacheService cacheService = new CacheService();
+        environment.jersey().register(new CacheResource(configuration, cacheService));
 
 
 
