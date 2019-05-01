@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,11 +22,10 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class CacheResource {
 	private static Logger log = LoggerFactory.getLogger(CacheResource.class);
-    private final DropConfiguration dropConfiguration;
     private final CacheService cacheService;
 
-    public CacheResource(DropConfiguration dropConfiguration, CacheService cacheService) {
-        this.dropConfiguration = dropConfiguration;
+    @Inject
+    public CacheResource(CacheService cacheService) {
         this.cacheService = cacheService;
     }
 

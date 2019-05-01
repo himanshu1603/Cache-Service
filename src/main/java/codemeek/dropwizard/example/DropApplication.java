@@ -1,6 +1,7 @@
 package codemeek.dropwizard.example;
 
 import codemeek.dropwizard.example.filter.RequestFilter;
+import codemeek.dropwizard.example.resources.CacheModule;
 import codemeek.dropwizard.example.resources.CacheResource;
 import codemeek.dropwizard.example.resources.DemoResource;
 import codemeek.dropwizard.example.service.CacheService;
@@ -10,6 +11,9 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * Created by jitendragangwar on 5/1/17.
@@ -31,8 +35,14 @@ public class DropApplication extends Application<DropConfiguration> {
         DemoService demoService = new DemoService();
         environment.jersey().register(new DemoResource(configuration, demoService));
         
-        CacheService cacheService = new CacheService();
-        environment.jersey().register(new CacheResource(configuration, cacheService));
+        Injector injector = Guice.createInjector(new CacheModule());
+
+        /*
+         * Now that we've got the injector, we can build objects.
+         */
+        CacheService cacheService = injector.getInstance(CacheService.class);
+             
+        environment.jersey().register(new CacheResource(cacheService));
 
 
 
