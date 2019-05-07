@@ -101,9 +101,6 @@ public class Heap {
 
     while (i != 0 && list.get(parent(i)).getCount() > list.get(i).getCount()) {
     	swap(i, parent(i));
-//      CacheObject swp = list.get(i);
-//      list.add(i, list.get(parent(i)));
-//      list.add(parent(i), swp);
       
       i = parent(i);
     }
