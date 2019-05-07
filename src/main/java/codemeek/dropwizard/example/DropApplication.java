@@ -37,9 +37,7 @@ public class DropApplication extends Application<DropConfiguration> {
         
         Injector injector = Guice.createInjector(new CacheModule());
 
-        /*
-         * Now that we've got the injector, we can build objects.
-         */
+       
         CacheService cacheService = injector.getInstance(CacheService.class);
              
         environment.jersey().register(new CacheResource(cacheService));
