@@ -9,19 +9,23 @@ import codemeek.dropwizard.example.models.CacheObject;
 public class Heap {
   private static Logger log = LoggerFactory.getLogger(Heap.class);
   List<CacheObject> list;
+  
+  // to store key and object index
+  private Map<String, Integer> cacheObjectMap;
   int capacity;
   int curSize;
 
   public Heap(int capacity) {
     this.capacity = capacity;
     list = new ArrayList<>();
+    cacheObjectMap = new HashMap<>();
   }
 
 
   public void swap(int i, int j) {
     CacheObject obj = list.get(i);
-    list.add(i, list.get(j));
-    list.add(j, obj);
+    list.set(i, list.get(j));
+    list.set(j, obj);
   }
 
   public void minHeapify(int i) {
@@ -33,7 +37,10 @@ public class Heap {
     if ( r < curSize && list.get(r).getCount() < list.get(smallest).getCount() )
       smallest = r;
     if ( smallest != i ) {
-      swap(i, parent(i));
+      //swapping index also in map
+      cacheObjectMap.put(list.get(smallest).getKey(), i);
+      cacheObjectMap.put(list.get(i).getKey(), smallest);
+      swap(i, smallest);
       minHeapify(smallest);
     }
 
@@ -50,64 +57,63 @@ public class Heap {
   private int right(int i) {
     return (2 * i + 2);
   }
-  
-  
-// This return key of object which we need to delete in overflow condition
-  private String deleteMin() {
-    if ( curSize <= 0 )
-      return null;
-    if ( curSize == 1 ) {
-      curSize--;
-      return list.get(0).getKey();
-    }
-
-    String root = list.get(0).getKey();
-    list.add(0, list.get(curSize - 1));
-    curSize--;
-    minHeapify(0);
-
-    return root;
-
-  }
 
 
-  // This will update the given object with given index
-  public void increaseKey(CacheObject obj, int index) {
+
+  private void increaseKey(CacheObject obj, int index) {
     list.set(index, obj);
     minHeapify(index);
   }
 
-
-  public int getIndexFromObject(CacheObject obj) {
-    return list.indexOf(obj);
-  }
-
-  public void setObjectAtIndex(int i, CacheObject obj) {
-    list.set(i, obj);
-    minHeapify(i);
-  }
-
-  public String insertKey(CacheObject obj) {
-    String key = "";
-    if ( curSize == capacity ) {
-      log.info("overflow condition.........");
-      key = deleteMin();
+  public String getValueFromCache(String key) {
+    if ( !cacheObjectMap.containsKey(key) ) {
+      return "Key does not exist!";
     }
-    
-    log.info("size is" + curSize);
-    curSize++;
-    int i = curSize - 1;
-    list.add(i, obj);
+    int index = cacheObjectMap.get(key);
+    CacheObject obj = list.get(index);
+    log.info("get object from cache is "+obj);
+    obj.setCount(obj.getCount() + 1);
+    increaseKey(obj, index);
+    return obj.getValue();
+  }
 
-    while (i != 0 && list.get(parent(i)).getCount() > list.get(i).getCount()) {
-    	swap(i, parent(i));
-      
-      i = parent(i);
+  public void setValueInCache(String key, String value) {
+    if ( cacheObjectMap.containsKey(key) ) {
+      int index = cacheObjectMap.get(key);
+      CacheObject obj = list.get(index);
+      obj.setValue(value);
+      obj.setCount(obj.getCount() + 1);
+      increaseKey(obj, index);
+      log.info("object is already present " + obj);
+    } else {
+      if ( list.size() == capacity ) {
+        log.info("removing object in full cache case" + list.get(0));
+        cacheObjectMap.remove(list.get(0).getKey());
+        list.remove(0);
+        list.add(0, list.get(list.size()-1));
+        list.remove(list.size() -1);
+        minHeapify(0);
+      }
+      CacheObject obj = new CacheObject();
+      obj.setCount(1);
+      obj.setKey(key);
+      obj.setValue(value);
+      list.add(obj);
+      int curIndex = list.size()-1;
+      cacheObjectMap.put(key, curIndex);
+
+      while (curIndex != 0 && list.get(parent(curIndex)).getCount() > list.get(curIndex).getCount()) {
+        cacheObjectMap.put(list.get(curIndex).getKey(), parent(curIndex));
+        cacheObjectMap.put(list.get(parent(curIndex)).getKey(), curIndex);
+        swap(curIndex, parent(curIndex));
+        curIndex = parent(curIndex);
+      }
+      log.info("inserted object is " + obj);
+
     }
-    return key;
-
 
   }
+
 
 
 }
